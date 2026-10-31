@@ -31,7 +31,7 @@ jobs:
           SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
         run: |
           cd java-maven-sonar-argocd-helm-k8s/spring-boot-app
-          mvn sonar:sonar \
+          mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
             -Dsonar.token="${{ secrets.SONAR_TOKEN }}" \
             -Dsonar.host.url="${{ vars.SONAR_HOST_URL }}"
 
