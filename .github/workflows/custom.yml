@@ -12,6 +12,10 @@ jobs:
   build-analyze-deploy:
     runs-on: self-hosted # Targets your self-hosted runner VM
 
+    env:
+      JAVA_HOME: /opt/java/jdk-17
+      # Prepending local bin paths ensures mvn and java are picked up globally for this job
+      PATH: /opt/java/jdk-17/bin:/opt/maven/current/bin:$PATH
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
