@@ -27,12 +27,12 @@ jobs:
 
       - name: SonarQube Analysis
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_GITHUB }}
           SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
         run: |
           cd java-maven-sonar-argocd-helm-k8s/spring-boot-app
           mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-            -Dsonar.token="${{ secrets.SONAR_TOKEN }}" \
+            -Dsonar.token="${{ secrets.SONAR_TOKEN_GITHUB }}" \
             -Dsonar.host.url="${{ vars.SONAR_HOST_URL }}"
 
       - name: Log in to Docker Hub
