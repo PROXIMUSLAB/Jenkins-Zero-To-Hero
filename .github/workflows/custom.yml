@@ -5,8 +5,7 @@ on:
     branches: [ "main" ]
   pull_request: 
     branches: ["main"]
-  workflow_dispatch: #
-    
+  workflow_dispatch:
 
 jobs:
   build-analyze-deploy:
@@ -14,13 +13,13 @@ jobs:
 
     env:
       JAVA_HOME: /opt/java/jdk-17
-      # Prepending local bin paths ensures mvn and java are picked up globally for this job
-      PATH: /opt/java/jdk-17/bin:/opt/maven/current/bin:$PATH
+      # Prepend Java and Maven while keeping standard system paths so tar/git remain accessible
+      PATH: /opt/java/jdk-17/bin:/opt/maven/current/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      
       - name: Build and Test (Maven)
         run: |
           cd java-maven-sonar-argocd-helm-k8s/spring-boot-app
