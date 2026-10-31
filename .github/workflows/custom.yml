@@ -20,14 +20,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Set up JDK 17 & Maven
-        uses: actions/setup-java@v5
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-          maven-version: '3.8.8'
-          cache: 'maven'
-
+      
       - name: Build and Test (Maven)
         run: |
           cd java-maven-sonar-argocd-helm-k8s/spring-boot-app
