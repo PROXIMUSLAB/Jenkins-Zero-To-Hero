@@ -52,6 +52,14 @@ jobs:
         run: |
           cd java-maven-sonar-argocd-helm-k8s/spring-boot-app
 
+          echo "Checking Nexus connectivity..."
+
+          echo "Nexus URL being used: ${NEXUS_URL}"
+
+          curl -sS -o /dev/null -w "HTTP Status: %{http_code}\n" \ 
+           "${NEXUS_URL}"
+                                                                    
+
           # Configure Nexus credentials for Maven
           mkdir -p ~/.m2
 
