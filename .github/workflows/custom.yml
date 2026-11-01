@@ -34,6 +34,47 @@ jobs:
             -Dsonar.token="${{ secrets.SONAR_TOKEN_GITHUB }}" \
             -Dsonar.host.url="${{ vars.SONAR_HOST_URL }}"
 
+      - name: Trivy Scan Java JAR
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: 'fs'
+          scan-ref: 'java-maven-sonar-argocd-helm-k8s/spring-boot-app/target/spring-boot-web.jar'
+          format: 'table'
+          severity: 'HIGH,CRITICAL'
+          ignore-unfixed: true
+          exit-code: '1'
+
+      - name: Upload JAR to Nexus
+        env:
+          NEXUS_URL: ${{ vars.NEXUS_URL }}
+          NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
+          NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
+        run: |
+          cd java-maven-sonar-argocd-helm-k8s/spring-boot-app
+
+          # Configure Nexus credentials for Maven
+          mkdir -p ~/.m2
+
+          cat > ~/.m2/settings.xml <<EOF
+          <settings>
+            <servers>
+              <server>
+                <id>nexus</id>
+                <username>${NEXUS_USERNAME}</username>
+                <password>${NEXUS_PASSWORD}</password>
+              </server>
+            </servers>
+          </settings>
+          EOF
+
+          # Upload the already-built JAR
+          mvn org.apache.maven.plugins:maven-deploy-plugin:3.1.4:deploy-file \
+            -Dfile=target/spring-boot-web.jar \
+            -DpomFile=pom.xml \
+            -DrepositoryId=nexus \
+            -Durl="${NEXUS_URL}"
+
+
   docker-and-deploy:
     runs-on: ubuntu-latest
     needs: build-analyze-deploy # Corrected to match the exact first job name
