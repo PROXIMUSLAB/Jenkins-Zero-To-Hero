@@ -56,10 +56,6 @@ jobs:
 
           echo "Nexus URL being used: ${NEXUS_URL}"
 
-          curl -sS -o /dev/null -w "HTTP Status: %{http_code}\n" \ 
-          "${NEXUS_URL}"
-                                                                    
-
           # Configure Nexus credentials for Maven
           mkdir -p ~/.m2
 
